@@ -1,13 +1,20 @@
-const gulp = require('gulp'); //usar as funcionalidades do gulp
-const sass = require('gulp-sass')(require('sass')); //configura o gulp para processar arquivos Sass
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const imagemin = require('gulp-imagemin');
 
 function styles(){
-    return gulp.src('./src/styles/*.scss') //mostra ao gulp os arquivos Sass a serem processados
-    .pipe(sass({outputSytle: 'compressed'})) //comprime arquivos
-    .pipe(gulp.dest('./dist/css')); //envia arquivos css comprimidos para pasta dist
+    return gulp.src('./src/styles/*.scss') 
+    .pipe(sass({outputSytle: 'compressed'})) 
+    .pipe(gulp.dest('./dist/css')); 
 }
 
-exports.default = styles //adciona função como padrão ao rodar o gulp
+function images(){
+    return gulp.src('./src/images/**/*') 
+    .pipe(imagemin()) 
+    .pipe(gulp.dest('./dist/images')); 
+}
+
+exports.default = gulp.parallel(styles, images); 
 exports.watch = function (){
     gulp.watch('./src/styles/*.scss', gulp.parallel(styles))
-} //observar alterações gulp
+} 
